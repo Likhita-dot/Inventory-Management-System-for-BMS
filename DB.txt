@@ -1,0 +1,58 @@
+create database BMS;
+use BMS;
+
+create table register(username varchar(30) primary key,
+password varchar(30),
+contact varchar(12),
+email varchar(30),
+address varchar(40),
+usertype varchar(40));
+
+create table addproduct(Product_Ecode varchar(50),
+HP_KW varchar(50),
+Num_Stages varchar(50),
+Pumpset_Model varchar(50),
+Old_Model varchar(50),
+Outlet_Size_MM varchar(50),
+method_Starting varchar(50),
+Recommended_Price double,
+Price_Type ENUM('City Price','District Price'),
+image varchar(50),
+CONSTRAINT addproduct_pk PRIMARY KEY (Product_Ecode));
+
+create table inventory(id int(11),
+Product_Ecode varchar(50),
+supplier_or_purchaser_name varchar(50),
+supplier_or_purchaser_address varchar(50),
+received_or_sold_quantity double,
+available_quantity double,
+manufacture_date date,
+received_or_sold_date date,
+inventory_type ENUM('Received','Supplied'),
+CONSTRAINT addproduct_pk PRIMARY KEY (id),
+CONSTRAINT fk_C1 FOREIGN KEY (Product_Ecode) REFERENCES addproduct(Product_Ecode));
+
+
+create table customer_order(order_id int,
+purchaser_name varchar(50),
+Product_Ecode varchar(50),
+purchase_date timestamp,
+quantity double,
+amount double,
+CONSTRAINT customer_order_pk PRIMARY KEY (order_id),
+CONSTRAINT fk_C2 FOREIGN KEY (Product_Ecode) REFERENCES addproduct(Product_Ecode));
+
+create table payment(payment_id int,
+order_id int,
+total_amount double,
+paid_amount double,
+discount_amount double, 
+payment_mode ENUM('Cash','Cheque'),
+cheque_no varchar(50),
+bank_name varchar(50),
+payment_date timestamp,
+status ENUM('Paid','Not Paid','Balance'),
+CONSTRAINT customer_order_pk PRIMARY KEY (payment_id),
+CONSTRAINT fk_C3 FOREIGN KEY (order_id) REFERENCES customer_order(order_id));
+
+
